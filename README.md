@@ -1,42 +1,73 @@
-# Foundry REST API
+# Foundry VTT Gold API
 Join the [discord](https://discord.gg/U634xNGRAC) server for updates, questions, and discussions
+
+## 📝 About This Fork
+
+This is a **fork** of the original [ThreeHats/foundryvtt-rest-api-relay](https://github.com/ThreeHats/foundryvtt-rest-api-relay) repository, specifically enhanced for **The Gold Box** project.
+
+### 🎯 Our Enhancements
+
+This fork includes all the functionality of the original relay server **PLUS** additional chat API endpoints designed specifically for AI-powered TTRPG assistance:
+
+#### ✅ New Chat API Endpoints
+
+**POST /chat** - Send chat messages to Foundry VTT
+- Send messages as any speaker (players, NPCs, AI assistants)
+- Support for in-character (IC) and out-of-character (OOC) messages
+- Whisper and blind message support
+- Dice roll integration with Foundry's chat system
+- Full validation and authentication
+
+**GET /chat/messages** - Retrieve chat history
+- Filter by user, message type, or time range
+- Search capabilities within chat content
+- Pagination and sorting options
+- Real-time WebSocket message delivery
+
+#### 🔧 Technical Enhancements
+- **WebSocket Integration**: Chat messages automatically delivered via Foundry's WebSocket system
+- **Message Validation**: Comprehensive input validation for all chat parameters
+- **Error Handling**: Proper HTTP status codes and error responses
+- **TypeScript Support**: Full type safety for all new endpoints
+
+---
+
+## 📚 Original Project Information
 
 This project consists of two main components:
 
-- [Relay Server](https://github.com/ThreeHats/foundryvtt-rest-api-relay): A WebSocket server that facilitates communication between Foundry VTT and external applications.
-- [Foundry Module](https://github.com/ThreeHats/foundryvtt-rest-api): A Foundry VTT module that connects to the relay server and provides access to Foundry data through a REST API.
+- **Original Relay Server**: [ThreeHats/foundryvtt-rest-api-relay](https://github.com/ThreeHats/foundryvtt-rest-api-relay)
+- **Original Foundry Module**: [ThreeHats/foundryvtt-rest-api](https://github.com/ThreeHats/foundryvtt-rest-api)
 
-## Foundry REST API Relay Server
-The server provides WebSocket connectivity and a REST API to access Foundry VTT data remotely.
-
-### Features
-- [Documentation](https://github.com/ThreeHats/foundryvtt-rest-api/wiki)
+### Core Features (from Original)
 - WebSocket relay to connect Foundry clients with external applications
 - REST API endpoints for searching Foundry content and retrieving entity data
 - Client management for tracking Foundry connections
 - Data storage and search results
-- [Roadmap](https://github.com/users/ThreeHats/projects/7)
+- Integration with Foundry's QuickInsert for powerful search capabilities
 
-### Installation
+---
 
-#### Using Docker Compose (Recommended)
-The easiest way to run the relay server is using Docker Compose:
+## 🚀 Installation
+
+### Using Docker Compose (Recommended)
+The easiest way to run the relay server:
 
 ```bash
-# Clone the repository
-git clone https://github.com/ThreeHats/foundryvtt-rest-api-relay.git
-cd foundryvtt-rest-api-relay
+# Clone this fork
+git clone https://github.com/ssjmarx/foundryvtt-gold-api.git
+cd foundryvtt-gold-api
 
-# Start the server
+# Start server
 docker-compose up -d
 
-# To stop the server
+# To stop server
 docker-compose down
 ```
 
 The server will be available at http://localhost:3010 and will automatically restart unless manually stopped.
 
-#### Manual Installation
+### Manual Installation
 ```bash
 ### Install dependencies
 pnpm install
@@ -51,25 +82,57 @@ pnpm build
 pnpm local
 ```
 
-### Configuration
+## ⚙️ Configuration
 
 The server can be configured using environment variables:
 
-- `PORT`: The port the server listens on (default: `3010`).
-- `NODE_ENV`: Set to `production` for production deployments.
-- `WEBSOCKET_PING_INTERVAL_MS`: Interval in milliseconds for sending WebSocket protocol pings to keep connections alive (default: `20000`).
-- `CLIENT_CLEANUP_INTERVAL_MS`: Interval in milliseconds for checking and removing inactive clients (default: `15000`).
-- `REDIS_URL`: Connection URL for Redis (optional, used for multi-instance deployments and session storage).
+- `PORT`: The port server listens on (default: `3010`)
+- `NODE_ENV`: Set to `production` for production deployments
+- `WEBSOCKET_PING_INTERVAL_MS`: WebSocket ping interval (default: `20000`)
+- `CLIENT_CLEANUP_INTERVAL_MS`: Client cleanup interval (default: `15000`)
+- `REDIS_URL`: Redis connection URL (optional, for multi-instance deployments)
 
-When using Docker Compose, you can set these in the `environment` section of the `docker-compose.yml` file.
+## 📖 API Documentation
 
-### Documentation
+### New Chat Endpoints
 
-This project uses TypeDoc and Docusaurus for comprehensive API documentation. The documentation is automatically generated from TypeScript source code and includes both manual documentation and auto-generated API references.
+#### POST /chat
+Send a chat message to Foundry VTT.
 
-#### Development
+```bash
+curl -X POST http://localhost:3010/chat \
+  -H "Content-Type: application/json" \
+  -H "x-api-key: YOUR_API_KEY" \
+  -d '{
+    "clientId": "your-client-id",
+    "message": {
+      "message": "Hello from API!",
+      "speaker": "AI Assistant",
+      "type": "ic",
+      "whisper": ["Player1"],
+      "blind": ["GM"],
+      "rollData": {...}
+    }
+  }'
+```
 
-To work with the documentation:
+#### GET /chat/messages
+Retrieve chat history with filtering options.
+
+```bash
+curl -X GET "http://localhost:3010/chat/messages?clientId=your-id&limit=10&type=ic" \
+  -H "x-api-key: YOUR_API_KEY"
+```
+
+### Original Endpoints
+All original endpoints from the ThreeHats relay server are fully documented in the [original wiki](https://github.com/ThreeHats/foundryvtt-rest-api/wiki).
+
+---
+
+## 🔧 Development
+
+### Documentation System
+This project uses TypeDoc and Docusaurus for comprehensive API documentation:
 
 ```bash
 # Install documentation dependencies
@@ -78,18 +141,13 @@ pnpm docs:install
 # Generate API documentation from TypeScript source
 pnpm docs:generate
 
-# Start the documentation development server
+# Start documentation development server
 pnpm docs:dev
 ```
 
-The documentation will be available at [http://localhost:3000](http://localhost:3000) and includes:
+The documentation will be available at [http://localhost:3000](http://localhost:3000).
 
-- **Manual Documentation**: Getting started guides, installation instructions, and usage examples
-- **API Reference**: Auto-generated from TypeScript source code using TypeDoc
-- **Interactive Navigation**: Browse the codebase structure and find specific functions, classes, and types
-
-#### Building for Production
-
+### Building for Production
 ```bash
 # Build static documentation files
 pnpm docs:build
@@ -98,41 +156,38 @@ pnpm docs:build
 pnpm docs:serve
 ```
 
-The documentation system automatically:
-- Generates markdown files from TypeScript comments and type definitions
-- Creates sidebar navigation based on code structure
-- Links to source code on GitHub
-- Updates when source code changes
+## 🎯 Use with The Gold Box
 
-## Foundry REST API Module
-A Foundry VTT module that connects to the relay server and provides access to Foundry data.
+This fork is specifically designed to work with **The Gold Box** - an AI-powered Foundry VTT module:
 
-### Features
-- WebSocket connection to relay server
-- Integration with Foundry's QuickInsert for powerful search capabilities
-- Entity retrieval by UUID
-- Configurable WebSocket relay URL and token
+1. **Install Gold Box**: [Latest Release](https://github.com/ssjmarx/Gold-Box/releases/latest)
+2. **Configure Backend**: Set up API keys and AI providers
+3. **Start Relay Server**: `./backend.sh` (includes this chat-enhanced relay)
+4. **Enjoy AI Chat**: Full AI-powered TTRPG assistance with Foundry integration
 
-### Installation
-1. Install the module with the latest manifest link [https://github.com/ThreeHats/foundryvtt-rest-api/releases/latest/download/module.json]([https://github.com/ThreeHats/foundryvtt-rest-api/releases/latest/download/module.json](https://github.com/ThreeHats/foundryvtt-rest-api/releases/latest/download/module.json))
-2. Configure the WebSocket relay URL in module settings
-3. Set your relay token (defaults to your world ID)
+## 🤝 Contributing
 
-### Configuration
-After installing the module, go to the module settings to configure:
+### For Gold Box Development
+- Fork this repository: [ssjmarx/foundryvtt-gold-api](https://github.com/ssjmarx/foundryvtt-gold-api)
+- Make your enhancements for AI chat functionality
+- Submit pull requests to improve the Gold Box experience
 
-- WebSocket Relay URL - URL for the WebSocket relay server (default: ws://localhost:3010)
-- WebSocket Relay Token - Token for grouping users together (default: your world ID)
+### For Original Project
+- Original issues and discussions: [ThreeHats/foundryvtt-rest-api-relay](https://github.com/ThreeHats/foundryvtt-rest-api-relay)
+- Original roadmap: [ThreeHats Project Board](https://github.com/users/ThreeHats/projects/7)
 
-### Technical Details
-#### Server Architecture
-- Express.js - HTTP server framework
-- WebSocket - For real-time communication
-- Data Store - In-memory storage for entities and search results
-- Client Manager - Handles client connections and message routing
+## 📄 License
 
-#### Module Architecture
-- Built with TypeScript for Foundry VTT
-- Integrates with Foundry's QuickInsert for powerful search capabilities
-- Provides WebSocket relay functionality for external applications
+This fork maintains the same license as the original project. See [LICENSE](LICENSE) for details.
 
+## 🙏 Acknowledgments
+
+- **ThreeHats**: For creating the original Foundry REST API relay server
+- **Foundry VTT Community**: For the amazing ecosystem and feedback
+- **Contributors**: Everyone who has helped improve this project
+
+---
+
+**Original Project**: [ThreeHats/foundryvtt-rest-api-relay](https://github.com/ThreeHats/foundryvtt-rest-api-relay)  
+**Gold Box Fork**: [ssjmarx/foundryvtt-gold-api](https://github.com/ssjmarx/foundryvtt-gold-api)  
+**Main Project**: [ssjmarx/Gold-Box](https://github.com/ssjmarx/Gold-Box)
