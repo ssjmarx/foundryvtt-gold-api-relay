@@ -77,13 +77,13 @@ app.use(express.json({ limit: '250mb' }));
 app.use(redisSessionMiddleware);
 
 // Add global error handler
-app.use((err: any, req: Request, res: Response, next: NextFunction) => {
+app.use((err: any, req: Request, res: Response, next: NextFunction): void => {
   log.error('Unhandled error:', err);
   if (!res.headersSent) {
     // Handle JSON parsing errors
     if (err.type === 'entity.parse.failed' || err instanceof SyntaxError || 
         (err.message && err.message.includes('JSON'))) {
-      return res.status(400).json({ 
+      res.status(400).json({ 
         error: 'Invalid JSON format',
         message: 'The request body contains malformed JSON. Please check your JSON syntax.',
         details: err.message
@@ -92,7 +92,7 @@ app.use((err: any, req: Request, res: Response, next: NextFunction) => {
     
     // Handle payload too large errors
     if (err.type === 'entity.too.large') {
-      return res.status(413).json({ 
+      res.status(413).json({ 
         error: 'Request entity too large',
         message: 'The request body is too large. Please reduce the size of your request.'
       });
