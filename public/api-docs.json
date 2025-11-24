@@ -4,7 +4,7 @@
   "authentication": {
     "required": true,
     "headerName": "x-api-key",
-    "description": "API key must be included in the x-api-key header for all endpoints except /api/status and /api/docs"
+    "description": "API key must be included in x-api-key header for all endpoints except /api/status and /api/docs"
   },
   "endpoints": [
     {
@@ -220,7 +220,7 @@
     {
       "method": "GET",
       "path": "/sheet",
-      "description": "Get actor sheet HTML This endpoint retrieves the HTML for an actor sheet based on the provided UUID or selected actor. Only works on Foundry version 12.",
+      "description": "Get actor sheet HTML This endpoint retrieves HTML for an actor sheet based on the provided UUID or selected actor. Only works on Foundry version 12.",
       "requiredParameters": [
         {
           "name": "clientId",
@@ -750,7 +750,7 @@
         {
           "name": "uuids",
           "type": "array",
-          "description": "The UUIDs of the tokens to add (optional, defaults to empty array)",
+          "description": "The UUIDs of tokens to add (optional, defaults to empty array)",
           "location": "body"
         },
         {
@@ -762,47 +762,14 @@
       ]
     },
     {
-      "method": "POST",
-      "path": "/remove-from-encounter",
-      "description": "Remove tokens from an encounter Removes selected tokens or specified UUIDs from the current encounter.",
+      "method": "GET",
+      "path": "/entity/get",
+      "description": "Get entity details This endpoint retrieves details of a specific entity.",
       "requiredParameters": [
         {
           "name": "clientId",
           "type": "string",
           "description": "The ID of the Foundry client to connect to",
-          "location": "query"
-        }
-      ],
-      "optionalParameters": [
-        {
-          "name": "encounter",
-          "type": "string",
-          "description": "The ID of the encounter to remove tokens from (optional, defaults to current encounter)",
-          "location": "query, body"
-        },
-        {
-          "name": "selected",
-          "type": "boolean",
-          "description": "Whether to remove selected tokens (optional, defaults to false)",
-          "location": "body"
-        },
-        {
-          "name": "uuids",
-          "type": "array",
-          "description": "The UUIDs of the tokens to remove (optional, defaults to empty array)",
-          "location": "body"
-        }
-      ]
-    },
-    {
-      "method": "GET",
-      "path": "/entity/get",
-      "description": "Get entity details This endpoint retrieves the details of a specific entity.",
-      "requiredParameters": [
-        {
-          "name": "clientId",
-          "type": "string",
-          "description": "Client ID for the Foundry world",
           "location": "query"
         }
       ],
@@ -822,7 +789,7 @@
         {
           "name": "actor",
           "type": "boolean",
-          "description": "Return the actor of specified entity",
+          "description": "Return the actor of the specified entity",
           "location": "query"
         }
       ]
@@ -835,7 +802,7 @@
         {
           "name": "clientId",
           "type": "string",
-          "description": "Client ID for the Foundry world",
+          "description": "The ID of the Foundry client to connect to",
           "location": "query"
         },
         {
@@ -868,7 +835,7 @@
         {
           "name": "clientId",
           "type": "string",
-          "description": "Client ID for the Foundry world",
+          "description": "The ID of the Foundry client to connect to",
           "location": "query"
         },
         {
@@ -894,7 +861,7 @@
         {
           "name": "actor",
           "type": "boolean",
-          "description": "Update the actor of selected entity when selected=true",
+          "description": "Update the actor of the selected entity when selected=true",
           "location": "query"
         }
       ]
@@ -907,7 +874,7 @@
         {
           "name": "clientId",
           "type": "string",
-          "description": "Client ID for the Foundry world",
+          "description": "The ID of the Foundry client to connect to",
           "location": "query"
         }
       ],
@@ -934,7 +901,7 @@
         {
           "name": "clientId",
           "type": "string",
-          "description": "Client ID for the Foundry world",
+          "description": "The ID of the Foundry client to connect to",
           "location": "body, query"
         }
       ],
@@ -985,7 +952,7 @@
         {
           "name": "clientId",
           "type": "string",
-          "description": "Client ID for the Foundry world",
+          "description": "The ID of the Foundry client to connect to",
           "location": "body, query"
         }
       ],
@@ -1016,7 +983,7 @@
         },
         {
           "name": "quantity",
-          "type": "number",
+          "type": "string",
           "description": "Quantity of the item to remove",
           "location": "body"
         }
@@ -1030,7 +997,7 @@
         {
           "name": "clientId",
           "type": "string",
-          "description": "Client ID for the Foundry world",
+          "description": "The ID of the Foundry client to connect to",
           "location": "query"
         },
         {
@@ -1069,7 +1036,7 @@
         {
           "name": "clientId",
           "type": "string",
-          "description": "Client ID for the Foundry world",
+          "description": "The ID of the Foundry client to connect to",
           "location": "query"
         },
         {
@@ -1103,12 +1070,12 @@
     {
       "method": "POST",
       "path": "/entity/kill",
-      "description": "Kill an entity Marks an entity as killed in the combat tracker, gives it the \"dead\" status, and sets its health to 0 in the Foundry world.",
+      "description": "Kill an entity Marks an entity as killed in the combat tracker, gives it a \"dead\" status, and sets its health to 0 in the Foundry world.",
       "requiredParameters": [
         {
           "name": "clientId",
           "type": "string",
-          "description": "Client ID for the Foundry world",
+          "description": "The ID of the Foundry client to connect to",
           "location": "query"
         }
       ],
@@ -1176,7 +1143,7 @@
         {
           "name": "clientId",
           "type": "string",
-          "description": "Client ID for the Foundry world",
+          "description": "The ID of the Foundry client to connect to",
           "location": "query"
         }
       ],
@@ -1197,7 +1164,7 @@
         {
           "name": "clientId",
           "type": "string",
-          "description": "Client ID for the Foundry world",
+          "description": "The ID of the Foundry client to connect to",
           "location": "query"
         }
       ],
@@ -1211,7 +1178,7 @@
         {
           "name": "clientId",
           "type": "string",
-          "description": "Client ID for the Foundry world",
+          "description": "The ID of the Foundry client to connect to",
           "location": "query"
         },
         {
@@ -1256,7 +1223,7 @@
         {
           "name": "clientId",
           "type": "string",
-          "description": "Client ID for the Foundry world",
+          "description": "The ID of the Foundry client to connect to",
           "location": "query"
         },
         {
@@ -1283,7 +1250,7 @@
         {
           "name": "clientId",
           "type": "string",
-          "description": "Client ID for the Foundry world",
+          "description": "The ID of the Foundry client to connect to",
           "location": "query"
         }
       ],
@@ -1323,7 +1290,7 @@
     {
       "method": "GET",
       "path": "/contents/:path",
-      "description": "This route is deprecated - use /structure with the path query parameter instead",
+      "description": "This route is deprecated - use /structure with a path query parameter instead",
       "requiredParameters": [],
       "optionalParameters": []
     },
@@ -1335,7 +1302,7 @@
         {
           "name": "clientId",
           "type": "string",
-          "description": "Client ID for the Foundry world",
+          "description": "The ID of the Foundry client to connect to",
           "location": "body, query"
         },
         {
@@ -1355,7 +1322,7 @@
         {
           "name": "clientId",
           "type": "string",
-          "description": "Client ID for the Foundry world",
+          "description": "The ID of the Foundry client to connect to",
           "location": "body, query"
         },
         {
@@ -1388,7 +1355,7 @@
         {
           "name": "clientId",
           "type": "string",
-          "description": "Client ID for the Foundry world",
+          "description": "The ID of the Foundry client to connect to",
           "location": "body, query"
         },
         {
@@ -1415,7 +1382,7 @@
         {
           "name": "clientId",
           "type": "string",
-          "description": "Client ID for the Foundry world",
+          "description": "The ID of the Foundry client to connect to",
           "location": "query"
         }
       ],
@@ -1460,7 +1427,7 @@
         {
           "name": "clientId",
           "type": "string",
-          "description": "Client ID for the Foundry world",
+          "description": "The ID of the Foundry client to connect to",
           "location": "query"
         }
       ],
@@ -1474,7 +1441,7 @@
         {
           "name": "clientId",
           "type": "string",
-          "description": "Client ID for the Foundry world",
+          "description": "The ID of the Foundry client to connect to",
           "location": "query"
         }
       ],
@@ -1484,6 +1451,51 @@
           "type": "string",
           "description": "JavaScript script to execute",
           "location": "body"
+        }
+      ]
+    },
+    {
+      "method": "GET",
+      "path": "/chat/messages",
+      "description": "Get chat messages from Foundry VTT",
+      "requiredParameters": [
+        {
+          "name": "clientId",
+          "type": "string",
+          "description": "The ID of the Foundry client to connect to",
+          "location": "query"
+        }
+      ],
+      "optionalParameters": [
+        {
+          "name": "limit",
+          "type": "number",
+          "description": "Maximum number of messages to return (default: 20)",
+          "location": "query"
+        },
+        {
+          "name": "sort",
+          "type": "string",
+          "description": "Field to sort by (default: timestamp)",
+          "location": "query"
+        },
+        {
+          "name": "order",
+          "type": "string",
+          "description": "Sort order (asc or desc, default: desc)",
+          "location": "query"
+        },
+        {
+          "name": "user",
+          "type": "string",
+          "description": "Filter messages by specific user",
+          "location": "query"
+        },
+        {
+          "name": "type",
+          "type": "string",
+          "description": "Filter messages by type (roll, chat, ooc, etc.)",
+          "location": "query"
         }
       ]
     }

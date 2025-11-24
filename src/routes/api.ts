@@ -26,6 +26,7 @@ import { encounterRouter } from './api/encounter';
 import { sheetRouter } from './api/sheet';
 import { macroRouter } from './api/macro';
 import { structureRouter } from './api/structure';
+import { chatRouter } from './api/chat';
 import { log } from '../utils/logger';
 
 export const browserSessions = new Map<string, puppeteer.Browser>();
@@ -45,7 +46,7 @@ function cleanupInactiveSessions() {
       log.info(`Closing inactive headless session ${session.sessionId} for API key ${apiKey.substring(0, 8)}... (inactive for ${Math.round((now - session.lastActivity) / 60000)} minutes)`);
       
       try {
-        // Close the browser if it exists
+        // Close browser if it exists
         if (browserSessions.has(session.sessionId)) {
           const browser = browserSessions.get(session.sessionId);
           browser?.close().catch(err => log.error(`Error closing browser: ${err}`));
@@ -61,7 +62,7 @@ function cleanupInactiveSessions() {
   }
 }
 
-// Start the session cleanup interval when the module is loaded
+// Start the session cleanup interval when module is loaded
 setInterval(cleanupInactiveSessions, 60000); // Check every minute
 
 export const apiRoutes = (app: express.Application): void => {
@@ -71,7 +72,7 @@ export const apiRoutes = (app: express.Application): void => {
   // Create a router instead of using app directly
   const router = express.Router();
 
-  // Define routes on the router
+  // Define routes on router
   router.get("/", (req: Request, res: Response) => {
     res.sendFile(path.join(__dirname, "../../_test/test-client.html"));
   });
@@ -173,7 +174,7 @@ export const apiRoutes = (app: express.Application): void => {
   // Proxy asset requests to Foundry
   router.get('/proxy-asset/:path(*)', requestForwarderMiddleware, async (req: Request, res: Response) => {
     try {
-      // Get the Foundry URL from the client metadata or use default
+      // Get Foundry URL from client metadata or use default
       const clientId = req.query.clientId as string;
       let foundryBaseUrl = 'http://localhost:30000'; // Default Foundry URL
       
@@ -336,6 +337,7 @@ export const apiRoutes = (app: express.Application): void => {
   app.use('/', sheetRouter);
   app.use('/', macroRouter);
   app.use('/', structureRouter);
+  app.use('/', chatRouter);
   app.use('/dnd5e', dnd5eRouter);
 };
 
@@ -416,7 +418,7 @@ function setupMessageHandlers() {
             let html = data.html || (data.data && data.data.html) || '';
             const css = data.css || (data.data && data.data.css) || '';
             
-            // Get the system ID for use in the HTML output
+            // Get the system ID for use in HTML output
             const gameSystemId = (client as any).metadata?.systemId || 'unknown';
             
             if (pending.format === 'json') {
@@ -429,15 +431,15 @@ function setupMessageHandlers() {
                 css: css
               });
             } else {
-              // Get the scale and tab parameters from the pending request
+              // Get the scale and tab parameters from pending request
               const initialScale = pending.initialScale || null;
               // Convert activeTab to a number if it exists, or keep as null
               const activeTabIndex = pending.activeTab !== null ? Number(pending.activeTab) : null;
 
-              // If a specific tab index is requested, pre-process the HTML to activate that tab
+              // If a specific tab index is requested, pre-process HTML to activate that tab
               if (activeTabIndex !== null && !isNaN(activeTabIndex)) {
               try {
-                // Create a virtual DOM to manipulate the HTML
+                // Create a virtual DOM to manipulate HTML
                 const dom = new JSDOM(html);
                 const document = dom.window.document;
                 
@@ -516,7 +518,7 @@ function setupMessageHandlers() {
       }
     } catch (error) {
       log.error(`Error handling actor sheet HTML response:`, { error });
-      log.debug(`Response data that caused the error:`, {
+      log.debug(`Response data that caused error:`, {
         requestId: data.requestId,
         hasData: !!data.data,
         dataType: typeof data.data
@@ -557,7 +559,7 @@ function setupMessageHandlers() {
         // Send the binary data
         request.res.status(200).end(buffer);
       } else {
-        // Send JSON response with the file data
+        // Send JSON response with file data
         safeResponse(request.res, 200, {
           clientId: client.getId(),
           requestId: data.requestId,

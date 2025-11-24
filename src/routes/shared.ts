@@ -49,7 +49,7 @@ export const PENDING_REQUEST_TYPES = [
     'end-encounter', 'add-to-encounter', 'remove-from-encounter', 'kill', 'decrease', 'increase', 'give', 'remove', 'execute-js',
     'select', 'selected', 'file-system', 'upload-file', 'download-file',
     'get-actor-details', 'modify-item-charges', 'use-ability', 'use-feature', 'use-spell', 'use-item', 'modify-experience', 'add-item', 'remove-item',
-    'get-folder', 'create-folder', 'delete-folder'
+    'get-folder', 'create-folder', 'delete-folder', 'chat-messages', 'chat'
 ] as const;
   
 export type PendingRequestType = typeof PENDING_REQUEST_TYPES[number];
@@ -69,4 +69,4 @@ export interface PendingRequest {
     darkMode?: boolean;
 }
 
-export const pendingRequests = new Map<string, PendingRequest>(); 
+export const pendingRequests = new Map<string, PendingRequest>();

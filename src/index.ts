@@ -76,32 +76,6 @@ app.use(express.json({ limit: '250mb' }));
 // Add Redis session middleware
 app.use(redisSessionMiddleware);
 
-// Add global error handler
-app.use((err: any, req: Request, res: Response, next: NextFunction): void => {
-  log.error('Unhandled error:', err);
-  if (!res.headersSent) {
-    // Handle JSON parsing errors
-    if (err.type === 'entity.parse.failed' || err instanceof SyntaxError || 
-        (err.message && err.message.includes('JSON'))) {
-      res.status(400).json({ 
-        error: 'Invalid JSON format',
-        message: 'The request body contains malformed JSON. Please check your JSON syntax.',
-        details: err.message
-      });
-    }
-    
-    // Handle payload too large errors
-    if (err.type === 'entity.too.large') {
-      res.status(413).json({ 
-        error: 'Request entity too large',
-        message: 'The request body is too large. Please reduce the size of your request.'
-      });
-    }
-    
-    // Default error response
-    res.status(500).json({ error: 'Internal server error' });
-  }
-});
 
 // Serve static files from public directory
 app.use("/static", express.static(path.join(__dirname, "../public")));
