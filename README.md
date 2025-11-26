@@ -18,7 +18,7 @@ This fork includes all the functionality of the original relay server **PLUS** a
 - Dice roll integration with Foundry's chat system
 - Full validation and authentication
 
-**GET /chat/messages** - Retrieve chat history
+**GET /messages** - Retrieve chat history
 - Filter by user, message type, or time range
 - Search capabilities within chat content
 - Pagination and sorting options
