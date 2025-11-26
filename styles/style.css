@@ -1,0 +1,51 @@
+.message-container {
+  flex: 1;
+  overflow-y: auto;
+  margin-bottom: 10px;
+  padding: 10px;
+  border: 1px solid #666;
+  background: rgba(0, 0, 0, 0.05);
+  max-height: 300px;
+}
+
+.message-container .message {
+  margin-bottom: 8px;
+  padding-bottom: 8px;
+  border-bottom: 1px solid rgba(0, 0, 0, 0.1);
+}
+
+.message-container .message .sender {
+  font-weight: bold;
+  margin-right: 5px;
+}
+
+.message-container .message .content {
+  flex: 1;
+}
+
+.message-container .message .timestamp {
+  font-size: 0.8em;
+  color: #888;
+  margin-left: 10px;
+}
+
+.message-input-container {
+  display: flex;
+}
+
+.message-input-container input {
+  flex: 1;
+  margin-right: 5px;
+  height: 28px;
+}
+
+.message-input-container button {
+  width: 36px;
+  height: 36px;
+}
+
+[data-settings-key="foundry-rest-api.apiKey"] > .form-fields {
+  flex-direction: column !important;
+}
+
+/*# sourceMappingURL=bundle.css.map */
