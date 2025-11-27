@@ -50,14 +50,15 @@ chatRouter.post("/chat", ...commonMiddleware, createApiRoute({
 chatRouter.get("/messages", ...commonMiddleware, createApiRoute({
   type: 'chat-messages',
   requiredParams: [
-    { name: 'clientId', from: 'query', type: 'string' } // Client ID for the Foundry world
+    { name: 'clientId', from: 'query', type: 'string' } // Client ID for Foundry world
   ],
   optionalParams: [
     { name: 'limit', from: 'query', type: 'number' }, // Maximum number of messages to return (default: 20)
     { name: 'sort', from: 'query', type: 'string' }, // Field to sort by (default: timestamp)
     { name: 'order', from: 'query', type: 'string' }, // Sort order (asc or desc, default: desc)
     { name: 'user', from: 'query', type: 'string' }, // Filter messages by specific user
-    { name: 'type', from: 'query', type: 'string' } // Filter messages by type (roll, chat, ooc, etc.)
+    { name: 'type', from: 'query', type: 'string' }, // Filter messages by type (roll, chat, ooc, etc.)
+    { name: 'refresh', from: 'query', type: 'boolean' } // Force refresh of message cache from Foundry
   ]
 }));
 
