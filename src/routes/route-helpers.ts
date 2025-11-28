@@ -4,7 +4,7 @@ import { pendingRequests, safeResponse, PendingRequest, PendingRequestType } fro
 import { log } from '../utils/logger';
 
 /**
- * Defines a parameter to be extracted from the request.
+ * Defines a parameter to be extracted from request.
  */
 interface ParamDef {
   name: string;
@@ -21,22 +21,22 @@ interface ApiRouteConfig {
   optionalParams?: ParamDef[];
   timeout?: number;
   /**
-   * Custom validation logic for the parameters.
-   * @param params Extracted parameters from the request.
+   * Custom validation logic for parameters.
+   * @param params Extracted parameters from request.
    * @param req The Express request object.
    * @returns An object with an error message and/or a how-to-use message, or null if no validation is needed.
    */
   validateParams?: (params: Record<string, any>, req: Request) => Promise<{ error?: string; howToUse?: string } | null> | { error?: string; howToUse?: string } | null;
   /**
-   * Custom logic to build the payload for the client.
-   * @param params Extracted parameters from the request.
+   * Custom logic to build payload for client.
+   * @param params Extracted parameters from request.
    * @param req The Express request object.
    * @returns The payload object.
    */
   buildPayload?: (params: Record<string, any>, req: Request) => Promise<Record<string, any>> | Record<string, any>;
   /**
-   * Custom logic to build additional properties for the pending request.
-   * @param params Extracted parameters from the request.
+   * Custom logic to build additional properties for pending request.
+   * @param params Extracted parameters from request.
    * @returns An object with additional properties for PendingRequest.
    */
   buildPendingRequest?: (params: Record<string, any>) => Partial<Omit<PendingRequest, 'res' | 'timestamp' | 'type' | 'clientId'>>;
@@ -140,7 +140,7 @@ export function createApiRoute(config: ApiRouteConfig) {
 
     const clientId = params.clientId as string;
 
-    // Get the client instance
+    // Get client instance
     const client = await ClientManager.getClient(clientId);
     if (!client) {
       return safeResponse(res, 404, { error: "Invalid client ID" });
@@ -149,23 +149,30 @@ export function createApiRoute(config: ApiRouteConfig) {
     try {
       const requestId = `${config.type}_${Date.now()}`;
 
-      // Register the pending request
+      // Register pending request
       const pendingRequestData: PendingRequest = {
         res,
         type: config.type,
-        clientId: clientId,
+        clientId,
         timestamp: Date.now(),
         ...(config.buildPendingRequest ? config.buildPendingRequest(params) : {}),
       };
       pendingRequests.set(requestId, pendingRequestData);
 
-      // Build the payload, excluding clientId
+      // Build the payload for the client
       const payloadSource = config.buildPayload
         ? await config.buildPayload(params, req)
         : params;
       const { clientId: _clientId, type: userDefinedType, ...payload } = payloadSource;
 
-      // Send the message to the Foundry client
+      // Debug logging to track what's being sent to Foundry client
+      console.log("=== RELAY SENDING TO FOUNDRY ===");
+      console.log("Type:", config.type);
+      console.log("Request ID:", requestId);
+      console.log("Payload:", JSON.stringify(payload, null, 2));
+      log.info(`Sending ${config.type} request to Foundry client ${clientId}:`, payload);
+
+      // Send message to Foundry client
       const sent = client.send({
         type: config.type,
         requestId,
@@ -194,4 +201,4 @@ export function createApiRoute(config: ApiRouteConfig) {
       safeResponse(res, 500, { error: `Internal server error during ${config.type} request` });
     }
   };
-} 
+}
